@@ -1,11 +1,117 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import Script from "next/script";
 import styles from "./LoginPage.module.css";
+import { crearClienteSupabase } from "@/lib/supabase/client";
 
 export default function LoginPage() {
   const [toggled, setToggled] = useState(false);
+  const router = useRouter();
+  const supabase = crearClienteSupabase();
+
+  // ── Estado del formulario de inicio de sesión ──
+  const [loginEmail, setLoginEmail] = useState("");
+  const [loginPassword, setLoginPassword] = useState("");
+  const [loginError, setLoginError] = useState("");
+  const [loginCargando, setLoginCargando] = useState(false);
+
+  // ── Estado del formulario de registro ──
+  const [signupInstitucion, setSignupInstitucion] = useState("");
+  const [signupNombre, setSignupNombre] = useState("");
+  const [signupEmail, setSignupEmail] = useState("");
+  const [signupPassword, setSignupPassword] = useState("");
+  const [signupError, setSignupError] = useState("");
+  const [signupCargando, setSignupCargando] = useState(false);
+  const [signupExito, setSignupExito] = useState(false);
+
+  // ────────────────────────────────────────────────
+  // INICIAR SESIÓN
+  // ────────────────────────────────────────────────
+  async function handleLogin(e: React.FormEvent) {
+    e.preventDefault();
+    setLoginError("");
+    setLoginCargando(true);
+
+    const { data, error } = await supabase.auth.signInWithPassword({
+      email: loginEmail,
+      password: loginPassword,
+    });
+
+    if (error) {
+      // Mensaje genérico a propósito: no confirmamos si el email
+      // existe o no, para no facilitar que alguien enumere cuentas
+      // registradas probando direcciones al azar.
+      setLoginError("Correo o contraseña incorrectos.");
+      setLoginCargando(false);
+      return;
+    }
+
+    // Consultamos el rol para decidir a dónde redirigir.
+    const { data: perfil } = await supabase
+      .from("perfiles")
+      .select("rol")
+      .eq("id", data.user.id)
+      .single();
+
+    setLoginCargando(false);
+
+    const rolesConPanelAdmin = ["admin", "organizador", "juez"];
+    if (perfil && rolesConPanelAdmin.includes(perfil.rol)) {
+      router.push("/admin");
+    } else {
+      // Capitán u otro rol público → por ahora al inicio.
+      // Cuando construyamos el dashboard de equipo, esto cambia
+      // a algo como router.push(`/mi-equipo`).
+      router.push("/");
+    }
+    router.refresh();
+  }
+
+  // ────────────────────────────────────────────────
+  // REGISTRARSE
+  // ────────────────────────────────────────────────
+  async function handleSignup(e: React.FormEvent) {
+    e.preventDefault();
+    setSignupError("");
+    setSignupCargando(true);
+
+    if (signupPassword.length < 8) {
+      setSignupError("La contraseña debe tener al menos 8 caracteres.");
+      setSignupCargando(false);
+      return;
+    }
+
+    const { error } = await supabase.auth.signUp({
+      email: signupEmail,
+      password: signupPassword,
+      options: {
+        data: {
+          // Esto llega a raw_user_meta_data, que el trigger de
+          // Postgres lee para crear la fila en "perfiles".
+          nombre_completo: signupNombre,
+          institucion: signupInstitucion,
+        },
+      },
+    });
+
+    setSignupCargando(false);
+
+    if (error) {
+      setSignupError(
+        error.message.includes("already registered")
+          ? "Este correo ya está registrado."
+          : "No se pudo completar el registro. Intenta de nuevo."
+      );
+      return;
+    }
+
+    // Supabase, por defecto, exige confirmar el correo antes de
+    // poder iniciar sesión. Avisamos al usuario en vez de
+    // redirigirlo, porque todavía no tiene sesión activa.
+    setSignupExito(true);
+  }
 
   return (
     <>
@@ -26,7 +132,7 @@ export default function LoginPage() {
 
           {/* ── Sign In ── */}
           <div className={styles.containerForm}>
-            <form className={styles.signIn} onSubmit={(e) => e.preventDefault()}>
+            <form className={styles.signIn} onSubmit={handleLogin}>
               <h2>Iniciar Sesión</h2>
               <div className={styles.socialNetworks}>
                 {/* @ts-expect-error – ionicons custom element */}
@@ -39,24 +145,40 @@ export default function LoginPage() {
               <div className={styles.containerInput}>
                 {/* @ts-expect-error */}
                 <ion-icon name="mail-outline" />
-                <input type="text" placeholder="Email" />
+                <input
+                  type="email"
+                  placeholder="Email"
+                  value={loginEmail}
+                  onChange={(e) => setLoginEmail(e.target.value)}
+                  required
+                />
               </div>
               <div className={styles.containerInput}>
                 {/* @ts-expect-error */}
                 <ion-icon name="lock-closed-outline" />
-                <input type="password" placeholder="Contraseña" />
+                <input
+                  type="password"
+                  placeholder="Contraseña"
+                  value={loginPassword}
+                  onChange={(e) => setLoginPassword(e.target.value)}
+                  required
+                />
               </div>
 
+              {loginError && (
+                <span style={{ color: "#c0392b" }}>{loginError}</span>
+              )}
+
               <a href="#">¿Olvidaste tu contraseña?</a>
-              <button type="submit" className={styles.button}>
-                INICIAR SESIÓN
+              <button type="submit" className={styles.button} disabled={loginCargando}>
+                {loginCargando ? "INGRESANDO..." : "INICIAR SESIÓN"}
               </button>
             </form>
           </div>
 
           {/* ── Sign Up ── */}
           <div className={styles.containerForm}>
-            <form className={styles.signUp} onSubmit={(e) => e.preventDefault()}>
+            <form className={styles.signUp} onSubmit={handleSignup}>
               <h2>Registrarse</h2>
               <div className={styles.socialNetworks}>
                 {/* @ts-expect-error */}
@@ -64,37 +186,79 @@ export default function LoginPage() {
                 {/* @ts-expect-error */}
                 <ion-icon name="logo-instagram" />
               </div>
-              <span>Use su correo electrónico para registrarse</span>
 
-              <div className={styles.containerInput}>
-                {/* @ts-expect-error */}
-                <ion-icon name="business-outline" />
-                <input type="text" placeholder="Institución" />
-              </div>
-              <div className={styles.containerInput}>
-                {/* @ts-expect-error */}
-                <ion-icon name="add-circle-outline" />
-                <input type="text" placeholder="Rol" />
-              </div>
-              <div className={styles.containerInput}>
-                {/* @ts-expect-error */}
-                <ion-icon name="person-outline" />
-                <input type="text" placeholder="Nombre" />
-              </div>
-              <div className={styles.containerInput}>
-                {/* @ts-expect-error */}
-                <ion-icon name="mail-outline" />
-                <input type="text" placeholder="Email" />
-              </div>
-              <div className={styles.containerInput}>
-                {/* @ts-expect-error */}
-                <ion-icon name="lock-closed-outline" />
-                <input type="password" placeholder="Contraseña" />
-              </div>
+              {signupExito ? (
+                <span>
+                  ¡Listo! Revisa tu correo para confirmar tu cuenta antes de
+                  iniciar sesión.
+                </span>
+              ) : (
+                <>
+                  <span>Use su correo electrónico para registrarse</span>
 
-              <button type="submit" className={styles.button}>
-                REGISTRARSE
-              </button>
+                  <div className={styles.containerInput}>
+                    {/* @ts-expect-error */}
+                    <ion-icon name="business-outline" />
+                    <input
+                      type="text"
+                      placeholder="Institución"
+                      value={signupInstitucion}
+                      onChange={(e) => setSignupInstitucion(e.target.value)}
+                    />
+                  </div>
+                  {/*
+                    Nota: el campo "Rol" original se quitó a propósito.
+                    Todo registro público entra como "capitan"; los
+                    demás roles los asigna un admin desde el panel.
+                    Ver explicación en la conversación.
+                  */}
+                  <div className={styles.containerInput}>
+                    {/* @ts-expect-error */}
+                    <ion-icon name="person-outline" />
+                    <input
+                      type="text"
+                      placeholder="Nombre"
+                      value={signupNombre}
+                      onChange={(e) => setSignupNombre(e.target.value)}
+                      required
+                    />
+                  </div>
+                  <div className={styles.containerInput}>
+                    {/* @ts-expect-error */}
+                    <ion-icon name="mail-outline" />
+                    <input
+                      type="email"
+                      placeholder="Email"
+                      value={signupEmail}
+                      onChange={(e) => setSignupEmail(e.target.value)}
+                      required
+                    />
+                  </div>
+                  <div className={styles.containerInput}>
+                    {/* @ts-expect-error */}
+                    <ion-icon name="lock-closed-outline" />
+                    <input
+                      type="password"
+                      placeholder="Contraseña"
+                      value={signupPassword}
+                      onChange={(e) => setSignupPassword(e.target.value)}
+                      required
+                    />
+                  </div>
+
+                  {signupError && (
+                    <span style={{ color: "#c0392b" }}>{signupError}</span>
+                  )}
+
+                  <button
+                    type="submit"
+                    className={styles.button}
+                    disabled={signupCargando}
+                  >
+                    {signupCargando ? "REGISTRANDO..." : "REGISTRARSE"}
+                  </button>
+                </>
+              )}
             </form>
           </div>
 
