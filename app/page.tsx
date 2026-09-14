@@ -110,7 +110,7 @@ export default function HomePage() {
         <span className={styles.heroEyebrow}>Certamen Interuniversitario de Robótica e Innovación</span>
         <h1 className={styles.heroTitle}>CIRI 2026</h1>
         <p className={styles.heroSubtitle}>
-          Universidades de toda la región compiten con sus robots en sumo,
+          Instituciones Educativas de toda la región compiten con sus robots en sumo,
           velocidad y proyectos de innovación. Inscribe a tu equipo o sigue
           los resultados en tiempo real el día del evento.
         </p>
@@ -123,12 +123,12 @@ export default function HomePage() {
       {/* ── Barra de estado ── */}
       <div className={styles.statsBar}>
         <div className={styles.statItem}>
-          <div className={styles.statValue}>4</div>
+          <div className={styles.statValue}>3</div>
           <div className={styles.statLabel}>Categorías</div>
         </div>
         <div className={styles.statItem}>
-          <div className={styles.statValue}>+12</div>
-          <div className={styles.statLabel}>Universidades</div>
+          <div className={styles.statValue}>+8</div>
+          <div className={styles.statLabel}>Instituciones Educativas</div>
         </div>
         <div className={styles.statItem}>
           <div className={styles.statValue}>1</div>
@@ -267,7 +267,7 @@ export default function HomePage() {
             </div>
             <div className={styles.organizadorItem}>
               <strong>Sede</strong>
-              <span>Por definir</span>
+              <span>Universidad de Cordoba (polideportivo)</span>
             </div>
           </div>
         </div>
