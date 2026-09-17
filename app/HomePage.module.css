@@ -1,64 +1,41 @@
 @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Space+Grotesk:wght@400;500;600;700&display=swap');
 
 /* ============================================================
-   TOKENS DE DISEÑO — tema arcade/robótico
+   TOKENS DE DISEÑO — adaptados a la estética clara de LoginPage
    ============================================================ */
 .page {
-  --bg-void: #0b0f14;
-  --bg-panel: #131a22;
-  --bg-panel-alt: #0f151c;
-  --accent-amber: #f4ff20;
-  --accent-cyan: #4348d7;
-  --text-primary: #edeff2;
-  --text-muted: #7c8792;
-  --line: #263241;
+  --bg-void: #f0f4f3;
+  --bg-panel: #ffffff;
+  --bg-panel-alt: #eeeeee;
+  --accent-primary: #1453c1;
+  --accent-secondary: #e50b08;
+  --text-primary: #111111;
+  --text-muted: #555555;
+  --line: #c9cccb;
 
   background-color: var(--bg-void);
   color: var(--text-primary);
   font-family: "Space Grotesk", sans-serif;
   min-height: 100vh;
-  overflow-x: hidden;
-}
-
-.page * {
-  box-sizing: border-box;
-}
-
-/* Textura sutil de circuito en el fondo, no decorativa de más */
-.page {
-  background-image:
-    linear-gradient(var(--line) 1px, transparent 1px),
-    linear-gradient(90deg, var(--line) 1px, transparent 1px);
-  background-size: 48px 48px;
-  background-position: center;
-  background-attachment: fixed;
-  background-color: var(--bg-void);
-  position: relative;
-}
-
-.page::before {
-  content: "";
-  position: fixed;
-  inset: 0;
-  background: radial-gradient(ellipse at center, transparent 0%, var(--bg-void) 85%);
-  pointer-events: none;
-  z-index: 0;
+  /* CAMBIO CLAVE: Usamos 'clip' en vez de 'hidden' para que position: sticky funcione */
+  overflow-x: clip;
 }
 
 /* ============================================================
-   NAVEGACIÓN
+   NAVEGACIÓN FIJA
    ============================================================ */
 .nav {
   position: sticky;
   top: 0;
-  z-index: 50;
+  z-index: 100; /* Asegura que la barra quede por encima de las demás secciones */
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 18px clamp(20px, 5vw, 64px);
-  background: rgba(11, 15, 20, 0.85);
-  backdrop-filter: blur(8px);
+  background: rgba(255, 255, 255, 0.95); /* Fondo blanco semitransparente */
+  backdrop-filter: blur(8px); /* Difuminado sutil sobre el contenido inferior */
   border-bottom: 1px solid var(--line);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
 }
 
 .navBrand {
@@ -67,10 +44,12 @@
   font-size: 20px;
   letter-spacing: 0.05em;
   color: var(--text-primary);
+  text-decoration: none;
+  cursor: pointer;
 }
 
 .navBrand span {
-  color: var(--accent-amber);
+  color: var(--accent-primary);
 }
 
 .navLinks {
@@ -91,14 +70,15 @@
 
 .navLinks a:hover,
 .navLinks a:focus-visible {
-  color: var(--accent-cyan);
+  color: var(--accent-primary);
 }
 
 .navLoginBtn {
-  border: 1px solid var(--accent-amber);
-  color: var(--accent-amber);
+  border: 1px solid var(--accent-primary);
+  color: var(--accent-primary);
   background: transparent;
   padding: 9px 20px;
+  border-radius: 5px;
   font-family: "Space Grotesk", sans-serif;
   font-weight: 600;
   font-size: 14px;
@@ -109,12 +89,12 @@
 
 .navLoginBtn:hover,
 .navLoginBtn:focus-visible {
-  background: var(--accent-amber);
-  color: var(--bg-void);
+  background: var(--accent-secondary);
+  color: #ffffff;
 }
 
 /* ============================================================
-   HERO — la marquesina
+   HERO — marquesina principal
    ============================================================ */
 .hero {
   position: relative;
@@ -127,10 +107,12 @@
 }
 
 .heroEyebrow {
-  font-size: 13px;
-  color: var(--accent-cyan);
-  font-weight: 600;
+  font-size: 16px;
+  color: var(--accent-primary);
+  font-weight: 700;
   margin-bottom: 18px;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
 }
 
 .heroTitle {
@@ -141,9 +123,6 @@
   letter-spacing: 0.02em;
   margin: 0;
   color: var(--text-primary);
-  text-shadow:
-    0 0 18px rgba(255, 176, 32, 0.35),
-    0 0 42px rgba(41, 230, 198, 0.15);
   animation: flicker 2.4s ease-in-out 1;
 }
 
@@ -172,9 +151,10 @@
 }
 
 .btnPrimary {
-  background: var(--accent-amber);
-  color: var(--bg-void);
+  background: var(--accent-primary);
+  color: #ffffff;
   border: none;
+  border-radius: 5px;
   padding: 14px 32px;
   font-family: "Space Grotesk", sans-serif;
   font-weight: 700;
@@ -187,13 +167,14 @@
 .btnPrimary:hover,
 .btnPrimary:focus-visible {
   transform: translateY(-2px);
-  box-shadow: 0 8px 24px rgba(255, 176, 32, 0.25);
+  box-shadow: 0 6px 16px rgba(20, 83, 193, 0.3);
 }
 
 .btnSecondary {
   background: transparent;
-  color: var(--accent-cyan);
-  border: 1px solid var(--accent-cyan);
+  color: var(--accent-primary);
+  border: 1px solid var(--accent-primary);
+  border-radius: 5px;
   padding: 14px 32px;
   font-family: "Space Grotesk", sans-serif;
   font-weight: 700;
@@ -205,12 +186,12 @@
 
 .btnSecondary:hover,
 .btnSecondary:focus-visible {
-  background: var(--accent-cyan);
-  color: var(--bg-void);
+  background: var(--accent-primary);
+  color: #ffffff;
 }
 
 /* ============================================================
-   BARRA DE ESTADO — como un marcador
+   BARRA DE ESTADO
    ============================================================ */
 .statsBar {
   position: relative;
@@ -219,8 +200,11 @@
   grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
   max-width: 900px;
   margin: 0 auto;
-  border: 1px solid var(--line);
+  border-radius: 12px;
   background: var(--bg-panel);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.06);
+  border: 1px solid var(--line);
+  overflow: hidden;
 }
 
 .statItem {
@@ -237,7 +221,7 @@
   font-family: "Orbitron", sans-serif;
   font-weight: 700;
   font-size: 28px;
-  color: var(--accent-cyan);
+  color: var(--accent-primary);
 }
 
 .statLabel {
@@ -246,9 +230,44 @@
   margin-top: 6px;
 }
 
+
 /* ============================================================
-   SECCIONES — paneles HUD con esquinas tipo mira
+   SECCIONES Y PANELES
    ============================================================ */
+   /* Agrega o reemplaza esta sección en HomePage.module.css */
+
+.navLinks a {
+  position: relative;
+  color: var(--text-muted);
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 500;
+  padding-bottom: 6px;
+  transition: color 0.2s ease;
+}
+
+.navLinks a:hover,
+.navLinks a:focus-visible {
+  color: var(--accent-primary);
+}
+
+/* ── Estilo para la pestaña activa ── */
+.navLinks a.activeLink {
+  color: var(--text-primary);
+  font-weight: 700;
+}
+
+.navLinks a.activeLink::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background-color: #efeb07;
+  border-radius: 2px;
+}
+
 .section {
   position: relative;
   z-index: 1;
@@ -268,6 +287,7 @@
   font-weight: 700;
   font-size: clamp(26px, 4vw, 36px);
   margin: 0 0 12px;
+  color: var(--text-primary);
 }
 
 .sectionLead {
@@ -277,38 +297,13 @@
   margin: 0;
 }
 
-/* Panel con esquinas tipo HUD/mira */
 .panel {
   position: relative;
   background: var(--bg-panel);
   border: 1px solid var(--line);
+  border-radius: 12px;
   padding: 28px;
-}
-
-.panel::before,
-.panel::after,
-.panel > .corner1,
-.panel > .corner2 {
-  content: "";
-  position: absolute;
-  width: 12px;
-  height: 12px;
-  border-color: var(--accent-cyan);
-  opacity: 0.7;
-}
-
-.panel::before {
-  top: -1px;
-  left: -1px;
-  border-top: 2px solid var(--accent-cyan);
-  border-left: 2px solid var(--accent-cyan);
-}
-
-.panel::after {
-  bottom: -1px;
-  right: -1px;
-  border-bottom: 2px solid var(--accent-cyan);
-  border-right: 2px solid var(--accent-cyan);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
 }
 
 /* ── Reglamento ── */
@@ -340,7 +335,7 @@
 
 .downloadPanel .fileLabel {
   font-size: 13px;
-  color: var(--accent-amber);
+  color: var(--accent-secondary);
   font-weight: 600;
 }
 
@@ -357,7 +352,7 @@
 
 .categoriaNivel {
   font-size: 12px;
-  color: var(--accent-cyan);
+  color: var(--accent-primary);
   font-weight: 600;
   margin-bottom: 10px;
 }
@@ -366,6 +361,7 @@
   font-family: "Orbitron", sans-serif;
   font-size: 18px;
   margin: 0 0 10px;
+  color: var(--text-primary);
 }
 
 .categoriaCard p {
@@ -375,7 +371,7 @@
   margin: 0;
 }
 
-/* ── Cronograma (sí es una secuencia real → numeración justificada) ── */
+/* ── Cronograma ── */
 .timeline {
   display: flex;
   flex-direction: column;
@@ -398,17 +394,19 @@
   font-family: "Orbitron", sans-serif;
   font-weight: 700;
   font-size: 22px;
-  color: var(--accent-amber);
+  color: var(--accent-primary);
 }
 
 .timelineContent h4 {
   margin: 0 0 4px;
   font-size: 16px;
+  color: var(--text-primary);
 }
 
 .timelineContent .timelineFecha {
   font-size: 13px;
-  color: var(--accent-cyan);
+  color: var(--accent-secondary);
+  font-weight: 600;
   margin-bottom: 6px;
 }
 
@@ -419,7 +417,7 @@
   line-height: 1.5;
 }
 
-/* ── FAQ (acordeón) ── */
+/* ── FAQ ── */
 .faqItem {
   border-bottom: 1px solid var(--line);
 }
@@ -446,7 +444,7 @@
 }
 
 .faqIcon {
-  color: var(--accent-amber);
+  color: var(--accent-primary);
   font-family: "Orbitron", sans-serif;
   font-size: 18px;
   flex-shrink: 0;
@@ -494,6 +492,7 @@
   background: var(--bg-panel-alt);
   border: 1px solid var(--line);
   color: var(--text-primary);
+  border-radius: 6px;
   padding: 12px 14px;
   font-family: "Space Grotesk", sans-serif;
   font-size: 14px;
@@ -503,7 +502,7 @@
 .contactoForm input:focus,
 .contactoForm textarea:focus {
   outline: none;
-  border-color: var(--accent-cyan);
+  border-color: var(--accent-primary);
 }
 
 .organizadorItem {
@@ -515,6 +514,7 @@
 
 .organizadorItem strong {
   font-size: 14px;
+  color: var(--text-primary);
 }
 
 .organizadorItem span {
@@ -528,6 +528,7 @@
 .footer {
   position: relative;
   z-index: 1;
+  background: #ffffff;
   border-top: 1px solid var(--line);
   padding: 32px 24px;
   text-align: center;

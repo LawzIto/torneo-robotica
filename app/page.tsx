@@ -1,13 +1,70 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import styles from "./HomePage.module.css";
 
 // ────────────────────────────────────────────────────────────
-// Contenido de ejemplo. Cuando construyamos el módulo de
-// "gestión de contenido público", esto se reemplaza por datos
-// reales que vengan de la tabla contenido_publico / categorias
-// / eventos en Supabase, en vez de estar escrito a mano aquí.
+// COMPONENTES DE ANIMACIÓN
+// ────────────────────────────────────────────────────────────
+
+function NumberCounter({ target, duration = 1500 }: { target: number; duration?: number }) {
+  const [count, setCount] = useState(0);
+
+  useEffect(() => {
+    let startTime: number | null = null;
+    let animationFrameId: number;
+
+    const animate = (currentTime: number) => {
+      if (!startTime) startTime = currentTime;
+      const progress = Math.min((currentTime - startTime) / duration, 1);
+      
+      if (progress < 1) {
+        setCount(Math.floor(Math.random() * (target * 3 + 10)));
+        animationFrameId = requestAnimationFrame(animate);
+      } else {
+        setCount(target);
+      }
+    };
+
+    animationFrameId = requestAnimationFrame(animate);
+    return () => cancelAnimationFrame(animationFrameId);
+  }, [target, duration]);
+
+  return <span>{count}</span>;
+}
+
+function DecipherTitle({ text }: { text: string }) {
+  const [displayText, setDisplayText] = useState("");
+  const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789#%&@$";
+
+  useEffect(() => {
+    let iteration = 0;
+    const interval = setInterval(() => {
+      setDisplayText(
+        text
+          .split("")
+          .map((char, index) => {
+            if (char === " ") return " ";
+            if (index < iteration) return text[index];
+            return chars[Math.floor(Math.random() * chars.length)];
+          })
+          .join("")
+      );
+
+      if (iteration >= text.length) {
+        clearInterval(interval);
+      }
+      iteration += 1 / 3;
+    }, 40);
+
+    return () => clearInterval(interval);
+  }, [text]);
+
+  return <span>{displayText}</span>;
+}
+
+// ────────────────────────────────────────────────────────────
+// DATOS DE EJEMPLO
 // ────────────────────────────────────────────────────────────
 
 const CATEGORIAS = [
@@ -83,32 +140,99 @@ const FAQS = [
   },
 ];
 
+// ────────────────────────────────────────────────────────────
+// PÁGINA PRINCIPAL
+// ────────────────────────────────────────────────────────────
+
 export default function HomePage() {
   const [faqAbierta, setFaqAbierta] = useState<number | null>(0);
+  const [activeSection, setActiveSection] = useState<string>("");
+
+  useEffect(() => {
+    const sectionIds = ["reglamento", "categorias", "cronograma", "faq", "contacto"];
+    const observerOptions = {
+      root: null,
+      rootMargin: "-20% 0px -60% 0px",
+      threshold: 0,
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          setActiveSection(entry.target.id);
+        }
+      });
+    }, observerOptions);
+
+    sectionIds.forEach((id) => {
+      const el = document.getElementById(id);
+      if (el) observer.observe(el);
+    });
+
+    return () => observer.disconnect();
+  }, []);
 
   return (
     <div className={styles.page}>
       {/* ── Navegación ── */}
       <nav className={styles.nav}>
-        <div className={styles.navBrand}>
+        {/* Enlace ancla al Hero */}
+        <a href="#hero" className={styles.navBrand}>
           CIRI<span>_</span>2026
-        </div>
+        </a>
         <ul className={styles.navLinks}>
-          <li><a href="#reglamento">Reglamento</a></li>
-          <li><a href="#categorias">Categorías</a></li>
-          <li><a href="#cronograma">Cronograma</a></li>
-          <li><a href="#faq">FAQ</a></li>
-          <li><a href="#contacto">Contacto</a></li>
+          <li>
+            <a
+              href="#reglamento"
+              className={activeSection === "reglamento" ? styles.activeLink : ""}
+            >
+              Reglamento
+            </a>
+          </li>
+          <li>
+            <a
+              href="#categorias"
+              className={activeSection === "categorias" ? styles.activeLink : ""}
+            >
+              Categorías
+            </a>
+          </li>
+          <li>
+            <a
+              href="#cronograma"
+              className={activeSection === "cronograma" ? styles.activeLink : ""}
+            >
+              Cronograma
+            </a>
+          </li>
+          <li>
+            <a
+              href="#faq"
+              className={activeSection === "faq" ? styles.activeLink : ""}
+            >
+              FAQ
+            </a>
+          </li>
+          <li>
+            <a
+              href="#contacto"
+              className={activeSection === "contacto" ? styles.activeLink : ""}
+            >
+              Contacto
+            </a>
+          </li>
         </ul>
         <a href="/login" className={styles.navLoginBtn}>
           Iniciar sesión
         </a>
       </nav>
 
-      {/* ── Hero ── */}
-      <header className={styles.hero}>
+      {/* ── Hero con id="hero" ── */}
+      <header id="hero" className={styles.hero}>
         <span className={styles.heroEyebrow}>Certamen Interuniversitario de Robótica e Innovación</span>
-        <h1 className={styles.heroTitle}>CIRI 2026</h1>
+        <h1 className={styles.heroTitle}>
+          <DecipherTitle text="CIRI 2026" />
+        </h1>
         <p className={styles.heroSubtitle}>
           Instituciones Educativas de toda la región compiten con sus robots en sumo,
           velocidad y proyectos de innovación. Inscribe a tu equipo o sigue
@@ -123,15 +247,21 @@ export default function HomePage() {
       {/* ── Barra de estado ── */}
       <div className={styles.statsBar}>
         <div className={styles.statItem}>
-          <div className={styles.statValue}>3</div>
+          <div className={styles.statValue}>
+            <NumberCounter target={3} />
+          </div>
           <div className={styles.statLabel}>Categorías</div>
         </div>
         <div className={styles.statItem}>
-          <div className={styles.statValue}>+8</div>
+          <div className={styles.statValue}>
+            +<NumberCounter target={8} />
+          </div>
           <div className={styles.statLabel}>Instituciones Educativas</div>
         </div>
         <div className={styles.statItem}>
-          <div className={styles.statValue}>1</div>
+          <div className={styles.statValue}>
+            <NumberCounter target={1} />
+          </div>
           <div className={styles.statLabel}>Día de competencia</div>
         </div>
       </div>
@@ -152,7 +282,7 @@ export default function HomePage() {
               permitidos por categoría, el sistema de eliminación del
               bracket, y los criterios de desempate. Léelo completo antes de
               inscribir a tu equipo — la inspección técnica del día del
-              evento se basa estrictamente en este documento.
+              evento se basa strictly en este documento.
             </p>
           </div>
           <div className={`${styles.panel} ${styles.downloadPanel}`}>
@@ -245,9 +375,6 @@ export default function HomePage() {
               className={styles.contactoForm}
               onSubmit={(e) => e.preventDefault()}
             >
-              {/* Nota: este formulario todavía no envía datos a
-                  ningún lado — eso lo conectamos cuando construyamos
-                  el módulo de contenido público / notificaciones. */}
               <input type="text" placeholder="Nombre" required />
               <input type="email" placeholder="Correo" required />
               <textarea placeholder="Mensaje" rows={4} required />
@@ -267,7 +394,7 @@ export default function HomePage() {
             </div>
             <div className={styles.organizadorItem}>
               <strong>Sede</strong>
-              <span>Universidad de Cordoba (polideportivo)</span>
+              <span>Universidad de Córdoba (polideportivo)</span>
             </div>
           </div>
         </div>
