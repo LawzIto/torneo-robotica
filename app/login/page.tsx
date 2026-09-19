@@ -18,7 +18,6 @@ export default function LoginPage() {
   const [loginCargando, setLoginCargando] = useState(false);
 
   // ── Estado del formulario de registro ──
-  const [signupInstitucion, setSignupInstitucion] = useState("");
   const [signupNombre, setSignupNombre] = useState("");
   const [signupEmail, setSignupEmail] = useState("");
   const [signupPassword, setSignupPassword] = useState("");
@@ -40,9 +39,6 @@ export default function LoginPage() {
     });
 
     if (error) {
-      // Mensaje genérico a propósito: no confirmamos si el email
-      // existe o no, para no facilitar que alguien enumere cuentas
-      // registradas probando direcciones al azar.
       setLoginError("Correo o contraseña incorrectos.");
       setLoginCargando(false);
       return;
@@ -57,14 +53,13 @@ export default function LoginPage() {
 
     setLoginCargando(false);
 
-    const rolesConPanelAdmin = ["admin", "organizador", "juez"];
+    const rolesConPanelAdmin = ["admin", "organizador"];
     if (perfil && rolesConPanelAdmin.includes(perfil.rol)) {
       router.push("/admin");
+    } else if (perfil && perfil.rol === "capitan") {
+      router.push("/mi-equipo");
     } else {
-      // Capitán u otro rol público → por ahora al inicio.
-      // Cuando construyamos el dashboard de equipo, esto cambia
-      // a algo como router.push(`/mi-equipo`).
-      router.push("/");
+      router.push("/mi-equipo");
     }
     router.refresh();
   }
@@ -88,10 +83,7 @@ export default function LoginPage() {
       password: signupPassword,
       options: {
         data: {
-          // Esto llega a raw_user_meta_data, que el trigger de
-          // Postgres lee para crear la fila en "perfiles".
           nombre_completo: signupNombre,
-          institucion: signupInstitucion,
         },
       },
     });
@@ -107,9 +99,6 @@ export default function LoginPage() {
       return;
     }
 
-    // Supabase, por defecto, exige confirmar el correo antes de
-    // poder iniciar sesión. Avisamos al usuario en vez de
-    // redirigirlo, porque todavía no tiene sesión activa.
     setSignupExito(true);
   }
 
@@ -198,26 +187,10 @@ export default function LoginPage() {
 
                   <div className={styles.containerInput}>
                     {/* @ts-expect-error */}
-                    <ion-icon name="business-outline" />
-                    <input
-                      type="text"
-                      placeholder="Institución"
-                      value={signupInstitucion}
-                      onChange={(e) => setSignupInstitucion(e.target.value)}
-                    />
-                  </div>
-                  {/*
-                    Nota: el campo "Rol" original se quitó a propósito.
-                    Todo registro público entra como "capitan"; los
-                    demás roles los asigna un admin desde el panel.
-                    Ver explicación en la conversación.
-                  */}
-                  <div className={styles.containerInput}>
-                    {/* @ts-expect-error */}
                     <ion-icon name="person-outline" />
                     <input
                       type="text"
-                      placeholder="Nombre"
+                      placeholder="Nombre completo"
                       value={signupNombre}
                       onChange={(e) => setSignupNombre(e.target.value)}
                       required
@@ -264,7 +237,6 @@ export default function LoginPage() {
 
           {/* ── Welcome panel ── */}
           <div className={styles.containerWelcome}>
-            {/* shown when NOT toggled */}
             <div className={`${styles.welcome} ${styles.welcomeSignUp}`}>
               <h3>¡Bienvenido!</h3>
               <p>Ingrese sus datos para usar todas las funciones del sitio</p>
@@ -273,7 +245,6 @@ export default function LoginPage() {
               </button>
             </div>
 
-            {/* shown when toggled */}
             <div className={`${styles.welcome} ${styles.welcomeSignIn}`}>
               <h3>¡Hola!</h3>
               <p>Regístrese con sus datos para usar todas las funciones del sitio</p>

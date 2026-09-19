@@ -69,22 +69,16 @@ function DecipherTitle({ text }: { text: string }) {
 
 const CATEGORIAS = [
   {
-    nombre: "Sumo Autónomo",
+    nombre: "Sumo RC",
     nivel: "Universitario",
     descripcion:
-      "Robots que detectan y empujan a su oponente fuera del área, sin control remoto durante el combate.",
+      "Robots que detectan y empujan a su oponente fuera del área, con control remoto durante el combate.",
   },
   {
     nombre: "Line Follower",
     nivel: "Universitario",
     descripcion:
       "Velocidad y precisión siguiendo una ruta marcada. Gana quien complete el circuito en menor tiempo.",
-  },
-  {
-    nombre: "Robótica Educativa",
-    nivel: "Escolar",
-    descripcion:
-      "Categoría de iniciación para equipos que están dando sus primeros pasos en la robótica competitiva.",
   },
   {
     nombre: "Innovación Libre",

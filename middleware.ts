@@ -1,6 +1,7 @@
 // Middleware: se ejecuta ANTES de cargar cualquier página que
-// coincida con el "matcher" de abajo. Aquí protegemos /admin/*
-// verificando que haya sesión Y que el rol tenga permiso.
+// coincida con el "matcher" de abajo.
+//   /admin/*      → exige sesión Y rol admin/organizador
+//   /mi-equipo/*  → exige sesión (cualquier rol)
 
 import { NextResponse, type NextRequest } from "next/server";
 import { createServerClient } from "@supabase/ssr";
@@ -31,13 +32,13 @@ export async function middleware(request: NextRequest) {
 
   // IMPORTANTE: usar getUser() y no getSession(). getUser() valida
   // el token contra el servidor de Supabase en cada petición;
-  // getSession() solo lee la cookie sin verificarla, lo cual es
-  // más rápido pero inseguro para decisiones de acceso.
+  // getSession() solo lee la cookie sin verificarla.
   const {
     data: { user },
   } = await supabase.auth.getUser();
 
   const esRutaAdmin = request.nextUrl.pathname.startsWith("/admin");
+  const esRutaMiEquipo = request.nextUrl.pathname.startsWith("/mi-equipo");
 
   if (esRutaAdmin) {
     if (!user) {
@@ -53,16 +54,17 @@ export async function middleware(request: NextRequest) {
     const rolesConAccesoAdmin = ["admin", "organizador"];
 
     if (!perfil || !rolesConAccesoAdmin.includes(perfil.rol)) {
-      // Tiene sesión pero no el rol correcto (ej. un capitán
-      // intentando entrar a /admin) → lo mandamos al inicio,
-      // no al login, porque sí está autenticado.
       return NextResponse.redirect(new URL("/", request.url));
     }
+  }
+
+  if (esRutaMiEquipo && !user) {
+    return NextResponse.redirect(new URL("/login", request.url));
   }
 
   return response;
 }
 
 export const config = {
-  matcher: ["/admin/:path*"],
+  matcher: ["/admin/:path*", "/mi-equipo/:path*"],
 };
