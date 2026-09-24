@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import Script from "next/script";
 import styles from "./LoginPage.module.css";
 import { crearClienteSupabase } from "@/lib/supabase/client";
+import Image from "next/image";
 
 export default function LoginPage() {
   const [toggled, setToggled] = useState(false);
@@ -118,11 +119,27 @@ export default function LoginPage() {
 
       <main className={styles.body}>
         <div className={`${styles.container} ${toggled ? styles.toggle : ""}`}>
-
+        
           {/* ── Sign In ── */}
           <div className={styles.containerForm}>
             <form className={styles.signIn} onSubmit={handleLogin}>
+              
+              {/* Encabezado con Logo + Marca */}
+              <div className={styles.brandHeader}>
+  <Image
+    src="/logo-huellas.png"
+    alt="Logo Huellas Industriales"
+    width={36}
+    height={36}
+    style={{ objectFit: "contain" }}
+  />
+  <span className={styles.brandTitle}>
+    CIRI<span className={styles.brandUnderscore}>_</span>2026
+  </span>
+</div>
+
               <h2>Iniciar Sesión</h2>
+
               <div className={styles.socialNetworks}>
                 {/* @ts-expect-error – ionicons custom element */}
                 <ion-icon name="logo-tiktok" />
@@ -168,7 +185,23 @@ export default function LoginPage() {
           {/* ── Sign Up ── */}
           <div className={styles.containerForm}>
             <form className={styles.signUp} onSubmit={handleSignup}>
+              
+              {/* Encabezado con Logo + Marca */}
+              <div className={styles.brandHeader}>
+                <Image
+                  src="/logo-huellas.png"
+                  alt="Logo Huellas Industriales"
+                  width={34}
+                  height={30}
+                  style={{ objectFit: "contain" }}
+                />
+                <span className={styles.brandTitle}>
+                  CIRI<span className={styles.brandUnderscore}>_</span>2026
+                </span>
+              </div>
+
               <h2>Registrarse</h2>
+
               <div className={styles.socialNetworks}>
                 {/* @ts-expect-error */}
                 <ion-icon name="logo-tiktok" />

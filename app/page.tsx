@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import Image from "next/image"; // 👈 Importamos el componente Image de Next.js
 import styles from "./HomePage.module.css";
 
 // ────────────────────────────────────────────────────────────
@@ -170,10 +171,18 @@ export default function HomePage() {
     <div className={styles.page}>
       {/* ── Navegación ── */}
       <nav className={styles.nav}>
-        {/* Enlace ancla al Hero */}
+        {/* Enlace ancla al Hero con el Logo del Semillero */}
         <a href="#hero" className={styles.navBrand}>
+          <Image
+            src="/logo-huellas.png"
+            alt="Logo Huellas Industriales"
+            width={39}
+            height={34}
+            style={{ objectFit: "contain" }}
+          />
           CIRI<span>_</span>2026
         </a>
+
         <ul className={styles.navLinks}>
           <li>
             <a
@@ -281,7 +290,9 @@ export default function HomePage() {
           </div>
           <div className={`${styles.panel} ${styles.downloadPanel}`}>
             <span className={styles.fileLabel}>PDF · Edición 2026</span>
-            <a href="#" className={styles.btnPrimary}>Descargar reglamento</a>
+            <a href="/reglamento-ciri-2026.pdf" 
+            download="Reglamento_CIRI_2026.pdf"className={styles.btnPrimary} 
+            >Descargar reglamento</a>
           </div>
         </div>
       </section>

@@ -44,6 +44,44 @@
   color: #111111
 }
 
+/* Contenedor del logo + marca arriba del formulario */
+.brandHeader {
+  display: inline-flex;       /* Alineación tipo flex pero contenida */
+  align-items: center;        /* Centra verticalmente el logo con el texto */
+  justify-content: center;   /* Centra todo en el medio del formulario */
+  gap: 12px;                  /* Espacio entre el logo y el texto */
+  margin-bottom: 16px;        /* Espacio con el título Iniciar Sesión */
+  width: 100%;
+}
+
+.brandHeader img {
+  display: block;             /* Elimina espacio en blanco inferior por defecto */
+  height: auto;               /* Mantiene la proporción visual del PNG */
+}
+
+/* Estilo del texto CIRI_2026 */
+.brandTitle {
+ font-family: "Orbitron", sans-serif;
+  font-weight: 900;
+  font-size: 20px;
+  letter-spacing: 0.05em;
+  color: #111111;
+  line-height: 1;              /* Evita que el interlineado empuje el texto hacia abajo */
+}
+
+/* Guion bajo en color rojo corporativo */
+.brandUnderscore {
+  color: #e50b08;
+}
+
+/* Ajuste sutil del título principal para guardar proporción */
+.formTitle {
+  font-size: 24px;
+  font-weight: 700;
+  color: #111111;
+  margin-bottom: 16px;
+}
+
 /* ── Social icons ── */
 .socialNetworks {
   display: flex;
