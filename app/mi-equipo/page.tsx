@@ -515,7 +515,7 @@ function PanelParticipantes({ equipo, participantes, supabase, onCambio }: any) 
               </div>
             ) : (
               /* Vista Normal de Lectura */
-              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+              <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "space-between", alignItems: "center", gap: 10 }}>
                 <div>
                   <div className={styles.listItemName}>{p.nombre_completo}</div>
                   <div className={styles.listItemMeta}>

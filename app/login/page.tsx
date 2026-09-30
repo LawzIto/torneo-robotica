@@ -175,9 +175,18 @@ export default function LoginPage() {
                 <span style={{ color: "#c0392b" }}>{loginError}</span>
               )}
 
-              <a href="#">¿Olvidaste tu contraseña?</a>
+              <a href="/recuperar">¿Olvidaste tu contraseña?</a>
               <button type="submit" className={styles.button} disabled={loginCargando}>
                 {loginCargando ? "INGRESANDO..." : "INICIAR SESIÓN"}
+              </button>
+
+              {/* Solo en celular: reemplaza al panel de bienvenida */}
+              <button
+                type="button"
+                className={styles.mobileSwitch}
+                onClick={() => setToggled(true)}
+              >
+                ¿No tienes cuenta? <strong>Regístrate</strong>
               </button>
             </form>
           </div>
@@ -265,6 +274,14 @@ export default function LoginPage() {
                   </button>
                 </>
               )}
+
+              <button
+                type="button"
+                className={styles.mobileSwitch}
+                onClick={() => setToggled(false)}
+              >
+                ¿Ya tienes cuenta? <strong>Inicia sesión</strong>
+              </button>
             </form>
           </div>
 

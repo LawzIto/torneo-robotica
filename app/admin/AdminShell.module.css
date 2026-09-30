@@ -121,3 +121,86 @@
   padding: 40px;
   color: var(--text-muted);
 }
+
+/* ============================================================
+   RESPONSIVE — en celular la barra lateral pasa a ser una
+   barra superior con los enlaces desplazables horizontalmente.
+   ============================================================ */
+@media (max-width: 768px) {
+  .shell {
+    flex-direction: column;
+  }
+
+  .sidebar {
+    width: 100%;
+    padding: 0;
+    border-right: none;
+    border-bottom: 1px solid var(--line);
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    grid-template-areas:
+      "brand footer"
+      "nav nav";
+    align-items: center;
+  }
+
+  .brand {
+    grid-area: brand;
+    padding: 14px 16px;
+    margin: 0;
+    border-bottom: none;
+  }
+
+  .navList {
+    grid-area: nav;
+    display: flex;
+    overflow-x: auto;
+    border-top: 1px solid var(--line);
+    scrollbar-width: none;
+  }
+
+  .navList::-webkit-scrollbar {
+    display: none;
+  }
+
+  .navLink {
+    white-space: nowrap;
+    padding: 12px 16px;
+    border-left: none;
+    border-bottom: 3px solid transparent;
+  }
+
+  .navLinkActive {
+    border-bottom-color: var(--accent-primary);
+  }
+
+  .sidebarFooter {
+    grid-area: footer;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 0 16px;
+    border-top: none;
+  }
+
+  .rolBadge {
+    margin: 0;
+  }
+
+  .logoutBtn {
+    width: auto;
+    white-space: nowrap;
+  }
+
+  .main {
+    padding: 20px 16px;
+    max-width: none;
+  }
+
+  .pageTitle {
+    font-size: 22px;
+  }
+}

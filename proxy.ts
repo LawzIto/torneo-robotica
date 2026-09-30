@@ -1,4 +1,4 @@
-// Middleware: se ejecuta ANTES de cargar cualquier página que
+// Proxy (antes "middleware"): se ejecuta ANTES de cargar cualquier página que
 // coincida con el "matcher" de abajo.
 //   /admin/*      → exige sesión Y rol admin/organizador
 //   /mi-equipo/*  → exige sesión (cualquier rol)
@@ -6,7 +6,7 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { createServerClient } from "@supabase/ssr";
 
-export async function middleware(request: NextRequest) {
+export async function proxy(request: NextRequest) {
   let response = NextResponse.next({ request });
 
   const supabase = createServerClient(

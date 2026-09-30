@@ -142,6 +142,7 @@ const FAQS = [
 export default function HomePage() {
   const [faqAbierta, setFaqAbierta] = useState<number | null>(0);
   const [activeSection, setActiveSection] = useState<string>("");
+  const [menuAbierto, setMenuAbierto] = useState(false);
 
   useEffect(() => {
     const sectionIds = ["reglamento", "categorias", "cronograma", "faq", "contacto"];
@@ -183,7 +184,21 @@ export default function HomePage() {
           CIRI<span>_</span>2026
         </a>
 
-        <ul className={styles.navLinks}>
+        {/* Botón hamburguesa: solo visible en pantallas pequeñas */}
+        <button
+          type="button"
+          className={styles.navToggle}
+          onClick={() => setMenuAbierto(!menuAbierto)}
+          aria-label={menuAbierto ? "Cerrar menú" : "Abrir menú"}
+          aria-expanded={menuAbierto}
+        >
+          <span className={menuAbierto ? styles.navToggleOpen : ""} />
+        </button>
+
+        <ul
+          className={`${styles.navLinks} ${menuAbierto ? styles.navLinksOpen : ""}`}
+          onClick={() => setMenuAbierto(false)}
+        >
           <li>
             <a
               href="#reglamento"
@@ -223,6 +238,9 @@ export default function HomePage() {
             >
               Contacto
             </a>
+          </li>
+          <li className={styles.navLoginMobile}>
+            <a href="/login">Iniciar sesión</a>
           </li>
         </ul>
         <a href="/login" className={styles.navLoginBtn}>
@@ -285,13 +303,13 @@ export default function HomePage() {
               permitidos por categoría, el sistema de eliminación del
               bracket, y los criterios de desempate. Léelo completo antes de
               inscribir a tu equipo — la inspección técnica del día del
-              evento se basa strictly en este documento.
+              evento se basa estrictamente en este documento.
             </p>
           </div>
           <div className={`${styles.panel} ${styles.downloadPanel}`}>
             <span className={styles.fileLabel}>PDF · Edición 2026</span>
             <a href="/reglamento-ciri-2026.pdf" 
-            download="Reglamento_CIRI_2026.pdf"className={styles.btnPrimary} 
+            download="Reglamento_CIRI_2026.pdf" className={styles.btnPrimary}
             >Descargar reglamento</a>
           </div>
         </div>

@@ -1,0 +1,121 @@
+/* Misma estética que LoginPage */
+.body {
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 24px 16px;
+  background-color: #f0f4f3;
+  font-family: var(--font-montserrat), sans-serif;
+  color: #111111;
+}
+
+.card {
+  width: 100%;
+  max-width: 420px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 36px 24px;
+  background-color: white;
+  border-radius: 15px;
+  box-shadow: 0 0 10px rgb(0 0 0 / 0.3);
+}
+
+.brandHeader {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.brandHeader img {
+  display: block;
+  height: auto;
+}
+
+.brandTitle {
+  font-family: var(--font-orbitron), sans-serif;
+  font-weight: 900;
+  font-size: 20px;
+  letter-spacing: 0.05em;
+  line-height: 1;
+}
+
+.brandUnderscore {
+  color: #e50b08;
+}
+
+.form {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  text-align: center;
+}
+
+.form h2 {
+  font-size: 26px;
+  font-weight: 700;
+  margin: 0 0 4px;
+}
+
+.text {
+  font-size: 14px;
+  line-height: 1.5;
+  margin: 0 0 6px;
+}
+
+.form input {
+  width: 100%;
+  max-width: 320px;
+  height: 46px;
+  padding: 0 15px;
+  border: none;
+  outline: none;
+  background-color: #eeeeee;
+  font-family: var(--font-montserrat), sans-serif;
+  /* 16px evita que iOS haga zoom automático al enfocar el campo */
+  font-size: 16px;
+}
+
+.form input:focus {
+  box-shadow: inset 0 0 0 2px #1453c1;
+}
+
+.error {
+  font-size: 13px;
+  color: #c0392b;
+}
+
+.button {
+  width: 100%;
+  max-width: 320px;
+  height: 45px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 6px;
+  font-size: 15px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  background-color: #1453c1;
+  color: white;
+  text-decoration: none;
+  font-family: var(--font-montserrat), sans-serif;
+}
+
+.button:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+
+.back {
+  margin-top: 24px;
+  font-size: 14px;
+  color: #111111;
+}

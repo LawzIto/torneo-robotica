@@ -165,3 +165,30 @@
   color: var(--text-muted, #555555);
   margin-top: -8px;
 }
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+@media (max-width: 768px) {
+  /* Las tablas anchas se desplazan dentro del panel en vez de
+     romper el ancho de la pantalla */
+  .panel {
+    padding: 16px;
+    overflow-x: auto;
+  }
+
+  .table {
+    min-width: 560px;
+  }
+
+  .formRow {
+    max-width: none;
+  }
+
+  /* 16px evita que iOS haga zoom automático al enfocar el campo */
+  .formRow input,
+  .formRow select,
+  .formRow textarea {
+    font-size: 16px;
+  }
+}
