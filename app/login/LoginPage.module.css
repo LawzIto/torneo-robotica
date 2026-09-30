@@ -94,7 +94,21 @@
   border-radius: 6px;
   padding: 8px;
   cursor: pointer;
-  
+  transition: color 0.2s ease, border-color 0.2s ease;
+}
+
+/* Anula los márgenes de ".containerForm a" (pensados para el enlace
+   de "¿Olvidaste tu contraseña?") */
+.containerForm .socialNetworks a {
+  display: flex;
+  margin: 0;
+  color: #111111;
+}
+
+.containerForm .socialNetworks a:hover ion-icon,
+.containerForm .socialNetworks a:focus-visible ion-icon {
+  color: #1453c1;
+  border-color: #1453c1;
 }
 
 .containerForm span {

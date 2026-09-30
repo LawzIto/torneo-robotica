@@ -7,6 +7,30 @@ import styles from "./LoginPage.module.css";
 import { crearClienteSupabase } from "@/lib/supabase/client";
 import Image from "next/image";
 
+const REDES = [
+  { nombre: "TikTok", icono: "logo-tiktok", url: "https://www.tiktok.com/@semillero.huellas" },
+  { nombre: "Instagram", icono: "logo-instagram", url: "https://www.instagram.com/semillerohuellasindustriales/" },
+];
+
+function RedesSociales() {
+  return (
+    <div className={styles.socialNetworks}>
+      {REDES.map((red) => (
+        <a
+          key={red.nombre}
+          href={red.url}
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label={`${red.nombre} del Semillero Huellas Industriales`}
+        >
+          {/* @ts-expect-error – ionicons custom element */}
+          <ion-icon name={red.icono} />
+        </a>
+      ))}
+    </div>
+  );
+}
+
 export default function LoginPage() {
   const [toggled, setToggled] = useState(false);
   const router = useRouter();
@@ -140,16 +164,11 @@ export default function LoginPage() {
 
               <h2>Iniciar Sesión</h2>
 
-              <div className={styles.socialNetworks}>
-                {/* @ts-expect-error – ionicons custom element */}
-                <ion-icon name="logo-tiktok" />
-                {/* @ts-expect-error – ionicons custom element */}
-                <ion-icon name="logo-instagram" />
-              </div>
+              <RedesSociales />
               <span>Use su correo y contraseña</span>
 
               <div className={styles.containerInput}>
-                {/* @ts-expect-error */}
+                {/* @ts-expect-error – ionicons custom element */}
                 <ion-icon name="mail-outline" />
                 <input
                   type="email"
@@ -160,7 +179,7 @@ export default function LoginPage() {
                 />
               </div>
               <div className={styles.containerInput}>
-                {/* @ts-expect-error */}
+                {/* @ts-expect-error – ionicons custom element */}
                 <ion-icon name="lock-closed-outline" />
                 <input
                   type="password"
@@ -211,12 +230,7 @@ export default function LoginPage() {
 
               <h2>Registrarse</h2>
 
-              <div className={styles.socialNetworks}>
-                {/* @ts-expect-error */}
-                <ion-icon name="logo-tiktok" />
-                {/* @ts-expect-error */}
-                <ion-icon name="logo-instagram" />
-              </div>
+              <RedesSociales />
 
               {signupExito ? (
                 <span>
@@ -228,7 +242,7 @@ export default function LoginPage() {
                   <span>Use su correo electrónico para registrarse</span>
 
                   <div className={styles.containerInput}>
-                    {/* @ts-expect-error */}
+                    {/* @ts-expect-error – ionicons custom element */}
                     <ion-icon name="person-outline" />
                     <input
                       type="text"
@@ -239,7 +253,7 @@ export default function LoginPage() {
                     />
                   </div>
                   <div className={styles.containerInput}>
-                    {/* @ts-expect-error */}
+                    {/* @ts-expect-error – ionicons custom element */}
                     <ion-icon name="mail-outline" />
                     <input
                       type="email"
@@ -250,7 +264,7 @@ export default function LoginPage() {
                     />
                   </div>
                   <div className={styles.containerInput}>
-                    {/* @ts-expect-error */}
+                    {/* @ts-expect-error – ionicons custom element */}
                     <ion-icon name="lock-closed-outline" />
                     <input
                       type="password"
