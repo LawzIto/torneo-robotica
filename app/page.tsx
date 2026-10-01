@@ -136,6 +136,80 @@ const FAQS = [
 ];
 
 // ────────────────────────────────────────────────────────────
+// FORMULARIO DE CONTACTO
+// ────────────────────────────────────────────────────────────
+
+const CORREO_CIRI = "ciri2026.torneo@gmail.com";
+
+function FormularioContacto() {
+  const [estado, setEstado] = useState<"listo" | "enviando" | "enviado">("listo");
+  const [error, setError] = useState("");
+
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    const formulario = e.currentTarget;
+    const datos = Object.fromEntries(new FormData(formulario));
+
+    setError("");
+    setEstado("enviando");
+
+    try {
+      const respuesta = await fetch("/api/contacto", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(datos),
+      });
+      const resultado = await respuesta.json();
+
+      if (!respuesta.ok) {
+        setError(resultado.error ?? "No se pudo enviar el mensaje.");
+        setEstado("listo");
+        return;
+      }
+
+      formulario.reset();
+      setEstado("enviado");
+    } catch {
+      setError("No se pudo conectar. Revisa tu conexión e intenta de nuevo.");
+      setEstado("listo");
+    }
+  }
+
+  if (estado === "enviado") {
+    return (
+      <div className={styles.contactoExito}>
+        <strong>¡Mensaje enviado!</strong>
+        <p>Te responderemos al correo que nos dejaste.</p>
+        <button type="button" className={styles.btnSecondary} onClick={() => setEstado("listo")}>
+          Enviar otro mensaje
+        </button>
+      </div>
+    );
+  }
+
+  return (
+    <form className={styles.contactoForm} onSubmit={handleSubmit}>
+      <input name="nombre" type="text" placeholder="Nombre" maxLength={100} required />
+      <input name="correo" type="email" placeholder="Correo" maxLength={200} required />
+      <textarea name="mensaje" placeholder="Mensaje" rows={4} maxLength={5000} required />
+      {/* Campo trampa para bots: oculto para las personas */}
+      <input
+        name="sitio_web"
+        type="text"
+        tabIndex={-1}
+        autoComplete="off"
+        aria-hidden="true"
+        className={styles.campoTrampa}
+      />
+      {error && <p className={styles.contactoError}>{error}</p>}
+      <button type="submit" className={styles.btnPrimary} disabled={estado === "enviando"}>
+        {estado === "enviando" ? "Enviando..." : "Enviar mensaje"}
+      </button>
+    </form>
+  );
+}
+
+// ────────────────────────────────────────────────────────────
 // PÁGINA PRINCIPAL
 // ────────────────────────────────────────────────────────────
 
@@ -394,26 +468,16 @@ export default function HomePage() {
         </div>
         <div className={styles.contactoGrid}>
           <div className={styles.panel}>
-            <form
-              className={styles.contactoForm}
-              onSubmit={(e) => e.preventDefault()}
-            >
-              <input type="text" placeholder="Nombre" required />
-              <input type="email" placeholder="Correo" required />
-              <textarea placeholder="Mensaje" rows={4} required />
-              <button type="submit" className={styles.btnPrimary}>
-                Enviar mensaje
-              </button>
-            </form>
+            <FormularioContacto />
           </div>
           <div className={styles.panel}>
             <div className={styles.organizadorItem}>
-              <strong>Coordinación general</strong>
-              <span>coordinacion@ciri.edu</span>
+              <strong>Correo de contacto</strong>
+              <a href={`mailto:${CORREO_CIRI}`}>{CORREO_CIRI}</a>
             </div>
             <div className={styles.organizadorItem}>
-              <strong>Soporte técnico de inscripciones</strong>
-              <span>soporte@ciri.edu</span>
+              <strong>Inscripciones y soporte técnico</strong>
+              <span>Escríbenos al mismo correo o usa el formulario.</span>
             </div>
             <div className={styles.organizadorItem}>
               <strong>Sede</strong>
