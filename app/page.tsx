@@ -91,22 +91,22 @@ const CATEGORIAS = [
 
 const CRONOGRAMA = [
   {
-    fecha: "Por definir",
+    fecha: "12/10/26",
     titulo: "Apertura de inscripciones",
     detalle: "Equipos registran su universidad, participantes y ficha técnica del robot.",
   },
   {
-    fecha: "Por definir",
+    fecha: "19/11/26",
     titulo: "Cierre de inscripciones",
     detalle: "Última fecha para inscribirse y para modificar la ficha técnica del robot.",
   },
   {
-    fecha: "Por definir",
+    fecha: "Del 1 al 7 de noviembre del 26",
     titulo: "Inspección técnica",
     detalle: "Verificación de que cada robot cumple el reglamento de su categoría.",
   },
   {
-    fecha: "Por definir",
+    fecha: "20/11/26",
     titulo: "Día del certamen",
     detalle: "Eliminatorias, semifinales y final. Resultados y bracket en vivo en esta misma página.",
   },
